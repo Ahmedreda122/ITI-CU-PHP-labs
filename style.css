@@ -11,6 +11,8 @@ form{
     padding: 5px 20px;
 }
 
+
+
 input,textarea, select {
     padding: 10px;
     font-size: 16px;
@@ -40,7 +42,7 @@ textarea:focus{
 }
 
 
-input[type="submit"], input[type="reset"]{
+input[type="submit"], input[type="reset"], .button1{
     font-size: 15px;
     font-weight: 600;
     padding: 12px;
@@ -54,15 +56,21 @@ input[type="submit"], input[type="reset"]{
 }
 
 
-input[type="submit"]:hover, input[type="reset"] {
+input[type="submit"]:hover, input[type="reset"], .button1:hover, .button2 {
     background-color: white;
     color: black;
 }
 
-input[type="reset"]:hover {
+input[type="reset"]:hover, .button2:hover {
     background-color: black;
     color: white;
 }
+
+a{
+    text-decoration: none;
+    color: inherit;
+}
+
 
 .err {
     font-size: 12px;
@@ -102,3 +110,39 @@ p
     display: flex;
     gap : 10px;
 }
+
+
+tr {
+    width: 250px;
+    height: 35px;
+    text-align: center;
+}
+
+th {
+    width: 250px;
+    height: 40px;
+    color: white;
+}
+
+.th1 {
+    background-color: black;
+}
+
+.th2 {
+    background-color: #3bce65;
+}
+
+tr:nth-child(odd) {
+    background-color: #cecece;
+}
+/* #5bd67e #92e3a9  #def7e5 */
+
+.err {
+    font-size: 12px;
+    font-weight: 600;
+    color: red;
+    margin: 0px;
+    padding: 0;
+}
+
+

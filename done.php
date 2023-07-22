@@ -1,90 +1,135 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Info</title>
-    <style>
-        body {
-            margin: 20px;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-            Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-    </style>
-</head>
-<body>
 <?php
+//
+//if (isset($_POST['code']) && $_POST['code'] == "Ar122#")
+//{
+//    if (!isset($_POST['gender']) || $_POST['gender'] == 'male')
+//    {
+//        echo "<p> Thanks Mr ";
+//    }
+//    else if ($_POST['gender'] == 'female')
+//    {
+//        echo "<p> Thanks Miss";
+//    }
+//
+//    $fname = $_POST['fname'];
+//    $lname = $_POST['lname'];
+//    if (isset($fname))
+//    {
+//        echo $fname . " ";
+//    }
+//    else
+//    {
+//        $fname = "unknown";
+//    }
+//
+//    if (isset($lname))
+//    {
+//        echo $lname;
+//    }
+//    else
+//    {
+//        $lname = "unknown";
+//    }
+//
+//    echo "</p><br>";
+//
+//    echo "<br><p>Please Review Your Information</p><br>";
+//
+//    echo "Name: $fname $lname<br>";
+//
+//    echo "Address:";
+//    if (isset($_POST['address']))
+//    {
+//        echo $_POST['address'];
+//    }
+//
+//    echo "Your Skills<br>";
+//    if (isset($_POST['skills']))
+//    {
+//        echo "<ul>";
+//        foreach ($_POST['skills'] as $skill)
+//        {
+//            echo "<li>$skill</li>";
+//        }
+//        echo "</ul>";
+//    }
+//    echo '<br>';
+//
+//    echo "Department: {$_POST["department"]}<br>";
+//
+//}
+//else
+//{
+//    header("Location: index.php");
+//}
+    $errors = array();
 
-if (isset($_POST['code']) && $_POST['code'] == "Ar122#")
+    if ( !isset($_POST["fname"]) || empty($_POST["fname"]))
+    {
+        $errors['fname'] = true;
+    }
+
+    if (!isset($_POST["gender"]))
+    {
+        $errors['gender'] = true;
+    }
+
+    if (!isset($_POST["lname"]) || empty($_POST["lname"]))
+    {
+        $errors['lname'] = true;
+    }
+
+    $old_values = array();
+
+    if (!empty($errors))
+    {
+        $formErrors = json_encode($errors);
+        $old_values =  json_encode($_POST);
+
+       header("Location: index.php?errors={$formErrors}&oldValues=$old_values");
+       die();
+    }
+
+try
 {
-    if (!isset($_POST['gender']) || $_POST['gender'] == 'male')
+    $file = fopen("table.csv", "a");
+    foreach ($_POST as $key => $value)
     {
-        echo "<p> Thanks Mr ";
-    }
-    else if ($_POST['gender'] == 'female')
-    {
-        echo "<p> Thanks Miss";
-    }
-
-    $fname = $_POST['fname'];
-    $lname = $_POST['lname'];
-    if (isset($fname))
-    {
-        echo $fname . " ";
-    }
-    else
-    {
-        $fname = "unknown";
-    }
-
-    if (isset($lname))
-    {
-        echo $lname;
-    }
-    else
-    {
-        $lname = "unknown";
-    }
-
-    echo "</p>";
-
-    echo "<br><p>Please Review Your Information</p><br>";
-
-    echo "Name: $fname $lname<br><br>";
-
-
-    echo "Address:<br>";
-    if (isset($_POST['address']))
-    {
-        echo $_POST['address'];
-    }
-
-    echo "<br><br>Your Skills<br>";
-    if (isset($_POST['skills']))
-    {
-        echo "<ul>";
-        foreach ($_POST['skills'] as $skill)
+        if ($key === 'pass' || $key === 'code' || $key === 'edit')
         {
-            echo "<li>$skill</li>";
+            continue;
         }
-        echo "</ul>";
+
+        if ($key === "skills")
+        {
+            foreach ($value as $skill)
+            {
+                fwrite($file, "$skill | ");
+            }
+            $stat = fstat($file);
+            ftruncate($file, $stat['size']-2);
+            fwrite($file, ",");
+        }
+        else
+        {
+            fwrite($file, "$value,");
+        }
     }
-    echo '<br>';
 
-    echo "Department: {$_POST["department"]}<br>";
+    $stat = fstat($file);
+    ftruncate($file, $stat['size']-1);
+    fwrite($file, "\n");
+    fclose($file);
 
-}
-else
+} catch (Exception $e)
 {
-    echo "<script> alert(\"InvalidCode\") </script>";
-    header("Location: index.php");
-    die("invalid code");
+    echo $e->getMessage();
 }
-?>
-</body>
-</html>
 
+if (isset($_POST['edit']) && $_POST['edit'] == true)
+{
+    header("Location: delete.php?username={$_POST['username']}");
+    die();
+}
+header("Location: index.php");
+die();
