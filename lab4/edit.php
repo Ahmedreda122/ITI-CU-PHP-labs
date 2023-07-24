@@ -10,9 +10,8 @@ $keys = array(
         'Name',
         'Password',
         'Email',
-        'Room',
-        'edit',
-        'ID');
+        'Room'
+  );
 
 $arr_keys = array_keys($old);
 
@@ -21,6 +20,11 @@ if (isset($old['usrname']))
     $arr_values = array_values($old);
     $old = array_combine($keys, $arr_values);
 }
+
+echo '<pre>';
+print_r($old);
+echo '</pre>';
+
 ?>
 <!doctype html>
 <html lang="en">
