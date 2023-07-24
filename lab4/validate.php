@@ -67,8 +67,8 @@ if (!empty($errors))
 {
     $formErrors = json_encode($errors);
     $old_values =  json_encode($_POST);
-    if (isset($_POST['edit'])) {
-        header("Location: edit.php?errors={$formErrors}&oldData=$old_values&ID={$_POST['ID']}");
+    if (isset($_GET['edit'])) {
+        header("Location: edit.php?errors={$formErrors}&oldData=$old_values&ID={$_GET['ID']}");
         die();
     }
     header("Location: AddUser.php?errors={$formErrors}&oldValues=$old_values");
@@ -80,10 +80,10 @@ if (!empty($errors))
 try
 {
     require_once 'connect.php';
-    if (isset($_POST['edit'])) {
+    if (isset($_GET['edit'])) {
         $preparedsql = "UPDATE users SET Name = :name, Password = :pass, Email = :email, Room = :room, img = :img WHERE ID = :ID";
         $stmt = $pdo->prepare($preparedsql);
-        $stmt->bindParam(':ID', $_POST['ID']);
+        $stmt->bindParam(':ID', $_GET['ID']);
     }
     else
     {

@@ -34,7 +34,7 @@ if (isset($old['usrname']))
 </head>
 <body>
 <h1 style='font-family: cursive; box-sizing: border-box; width: 100%; margin:10px 0px; text-align: center;'>Edit User No. <?=$ID?></h1>;
-<form method="POST" action="validate.php" enctype="multipart/form-data">
+<form method="POST" action="validate.php?edit=true&ID=<?=$ID?>" enctype="multipart/form-data">
     <label for="usrname">Name</label>
     <input type="text" name="usrname" id="usrname" <?php if (isset($old['Name'])) echo "value=\"{$old['Name']}\""?>>
     <?php
@@ -81,8 +81,6 @@ if (isset($old['usrname']))
     if (isset($errors['img']))
         echo "<div class='err'>{$errors['img']}</div>";
     ?>
-    <input type="text" name="edit" value="true" hidden readonly>
-    <input type="text" name="ID" value='<?= $ID ?>' hidden readonly>
     <br>
     <input type="submit" value="Send">
     <input type="reset" value="Reset">
